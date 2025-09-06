@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aloneinthedark</title>
+    <!--
+      สำคัญมาก! ต้องเพิ่ม CDN ของ Tailwind CSS เพื่อให้คลาสต่างๆ ทำงานได้
+      หรือถ้าคุณใช้ Tailwind แบบ Build process ก็ไม่จำเป็นต้องใส่ CDN นี้
+      แต่ต้องแน่ใจว่าได้ตั้งค่า build process เรียบร้อยแล้ว
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- กำหนด Font 'Inter' หากต้องการใช้เป็นหลัก -->
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        /*
+          กำหนดสีพื้นหลังและสีตัวอักษรเริ่มต้น (สำหรับ Dark Mode) ที่นี่
+          เมื่อไม่มี class 'light-mode' ใน body, style นี้จะถูกนำไปใช้
+        */
+        background-color: #1f2937; /* Dark gray for Dark Mode background */
+        color: #e5e7eb; /* Light text for Dark Mode */
+      }
+
+      /*
+        กำหนด Keyframes สำหรับ Animation ชื่อเว็บ (สำหรับ Dark Mode)
+        Animation นี้จะทำให้ตัวอักษรค่อยๆ เลื่อนขึ้นเล็กน้อยและเปลี่ยนสีเมื่อเริ่มต้น
+      */
+      @keyframes fadeAndSlideInDark {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+          color: #9ca3af; /* gray-400 */
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+          color: #e5e7eb; /* gray-200 */
+        }
+      }
+
+      /*
+        กำหนด Keyframes สำหรับ Animation ชื่อเว็บ (สำหรับ Light Mode)
+        สีตัวอักษรจะยังคงเป็นสีอ่อน เพื่อให้ตัดกับพื้นหลัง Header สีดำ
+      */
+      @keyframes fadeAndSlideInLight {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+          color: #9ca3af; /* gray-400 */
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+          color: #e5e7eb; /* gray-200 */
+        }
+      }
+
+      /*
+        ใช้ Animation กับชื่อเว็บ "inthedark"
+        เริ่มต้นด้วย Dark Mode Animation
+      */
+      .animate-logo-name {
+        animation: fadeAndSlideInDark 0.8s ease-out forwards;
+      }
+      .light-mode .animate-logo-name {
+        animation: fadeAndSlideInLight 0.8s ease-out forwards;
+      }
+
+      /*
+        Light Mode Styles (จะถูกเปิดใช้งานเมื่อ body มี class 'light-mode')
+        เมื่อมี class นี้, style ด้านบน (ของ body) จะถูก override
+      */
+      .light-mode {
+        background-color: #ffffff; /* white */
+        color: #1f2937; /* gray-800 */ /* Default text color for light mode body */
+      }
+      
+      /*
+        แถบ Header (ส่วนโลโก้และชื่อเว็บ) และแถบเมนูนำทางด้านล่างโลโก้
+        รวมถึง Sidebar ด้านขวา และ Footer จะ **คงสี Dark Mode** ไว้เสมอ
+        ดังนั้น เราจะ **ไม่กำหนด** background-color และ color ใหม่สำหรับส่วนเหล่านี้โดยตรง
+        แต่จะกำหนดสีของข้อความและองค์ประกอบภายในให้ตัดกับพื้นหลังสีเข้มของมัน
+      */
+      
+      /* สีตัวอักษรและ hover ใน header ด้านบน (bg-gray-900) ยังคงเป็นสีอ่อน เพื่อตัดกับพื้นหลังสีดำเข้ม */
+      .light-mode header .container a,
+      .light-mode header .container #menu-btn {
+        color: #e5e7eb; /* gray-200 */
+      }
+      .light-mode header .container a:hover,
+      .light-mode header .container #menu-btn:hover {
+        color: #9ca3af; /* gray-400 */
+      }
+
+      /* สีตัวอักษรและ hover ในแถบเมนูนำทางด้านล่างโลโก้ (bg-gray-900) ยังคงเป็นสีอ่อน เพื่อตัดกับพื้นหลังสีดำเข้ม */
+      .light-mode .bg-gray-900.shadow-md nav a,
+      .light-mode .bg-gray-900.shadow-md .flex.items-center.space-x-2 button {
+        color: #e5e7eb; /* gray-200 */
+      }
+      .light-mode .bg-gray-900.shadow-md nav a:hover,
+      .light-mode .bg-gray-900.shadow-md .flex.items-center.space-x-2 button:hover {
+        color: #9ca3af; /* gray-400 */
+      }
+
+      /*
+        Mobile Menu จะยังคงเปลี่ยนเป็นสีอ่อนใน Light Mode (ตามที่เคยกำหนดไว้)
+      */
+      .light-mode #mobile-menu {
+        background-color: #e5e7eb; /* gray-200 */
+      }
+      .light-mode #mobile-menu a {
+        color: #1f2937; /* gray-800 */
+      }
+      .light-mode #mobile-menu a:hover,
+      .light-mode #mobile-menu button:hover {
+        background-color: #d1d5db; /* gray-300 */
+      }
+      .light-mode #mobile-menu button {
+        background-color: #9ca3af; /* gray-400 */
+        color: #1f2937; /* gray-800 */
+      }
+
+      /*
+        ส่วนของเนื้อหาหลัก (Left/Main Content Area) และข้อความ No results message
+        จะใช้สีที่กำหนดใน body โดยอัตโนมัติเมื่ออยู่ใน Light Mode
+      */
+      .light-mode #main-content #no-results-message {
+        color: #4b5563; /* gray-600 */
+      }
+      .light-mode .flex-grow.md\:mr-8 {
+        color: #374151; /* gray-700 */
+      }
+      /* ปรับสีเนื้อหาตัวอย่างใน Light Mode ให้เป็นสีดำ */
+      .light-mode .bg-gray-700.rounded-lg.shadow-md {
+          background-color: #f3f4f6; /* gray-100 for light mode content box */
+          color: #1f2937; /* Dark text for light mode content box */
+      }
+      .light-mode .bg-gray-700.rounded-lg.shadow-md h2 {
+          color: #1f2937; /* Dark text for light mode content box heading */
+      }
+
+
+      /*
+        สำหรับ Right Sidebar Box (bg-gray-900)
+        จะ **ไม่กำหนด** background-color และ color ใหม่ เพื่อให้คงสี Dark Mode
+        แต่ข้อความภายในจะยังคงสีอ่อนเพื่อให้ตัดกับพื้นหลังเข้ม
+      */
+      .light-mode .bg-gray-900.p-6.rounded-lg.shadow-xl h3 {
+        color: #e5e7eb; /* gray-200, เพื่อให้ตัดกับพื้นหลัง sidebar ที่ยังเป็นสีเข้ม */
+      }
+      /* ปรับสีปุ่มค้นหาใน Sidebar ให้ยังคงเป็น Dark Mode สีเข้ม */
+      .light-mode #search-bar-container input {
+        background-color: #4b5563; /* gray-700 */ /* คงสีพื้นหลังเข้มของ input */
+        color: #e5e7eb; /* gray-200 */ /* คงสีตัวอักษรอ่อน */
+        border-color: #374151; /* gray-700 */
+      }
+      .light-mode #search-bar-container input::placeholder {
+        color: #9ca3af; /* gray-400 */ /* คงสี placeholder อ่อน */
+      }
+      .light-mode #search-bar-container button {
+        background-color: #f97316; /* orange-500 */ /* คงสีปุ่มส้ม */
+        color: #ffffff;
+      }
+      .light-mode #search-bar-container button:hover {
+        background-color: #ea580c; /* orange-600 */ /* คงสีปุ่มส้ม hover */
+      }
+      .light-mode .bg-gray-900.p-6.rounded-lg.shadow-xl select {
+        background-color: #4b5563; /* gray-700 */ /* คงสีพื้นหลังเข้มของ select */
+        color: #e5e7eb; /* gray-200 */ /* คงสีตัวอักษรอ่อน */
+        border-color: #374151; /* gray-700 */
+      }
+      .light-mode .bg-gray-900.p-6.rounded-lg.shadow-xl ul a {
+        color: #9ca3af; /* gray-300 */ /* คงสีลิงก์อ่อน */
+      }
+      .light-mode .bg-gray-900.p-6.rounded-lg.shadow-xl ul a:hover {
+        color: #60a5fa; /* blue-400 */ /* คงสี hover ของลิงก์ */
+      }
+
+      /*
+        Footer จะ **ไม่กำหนด** background-color และ color ใหม่ เพื่อให้คงสี Dark Mode
+        แต่ข้อความภายในจะยังคงสีอ่อนเพื่อให้ตัดกับพื้นหลังเข้ม
+      */
+      .light-mode footer {
+        color: #e5e7eb; /* gray-200, เพื่อให้ตัดกับพื้นหลัง footer ที่ยังเป็นสีเข้ม */
+      }
+
+      /*
+        CSS สำหรับปุ่ม Scroll to Top
+      */
+      #scroll-to-top-btn {
+        position: fixed; /* ให้อยู่ที่ตำแหน่งคงที่บนหน้าจอ */
+        bottom: 20px; /* ห่างจากขอบล่าง 20px */
+        right: 20px; /* ห่างจากขอบขวา 20px */
+        z-index: 1000; /* ให้อยู่บนสุดขององค์ประกอบอื่นๆ */
+        background-color: #f97316; /* สีพื้นหลังส้ม (ค่าเริ่มต้น) */
+        color: white; /* สีไอคอนขาว */
+        border: none;
+        border-radius: 9999px; /* ทำให้เป็นวงกลม */
+        padding: 1rem; /* ขนาดปุ่ม */
+        cursor: pointer;
+        display: none; /* ซ่อนไว้ตอนแรก */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* เงา */
+        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Animation เมื่อ hover */
+      }
+
+      #scroll-to-top-btn:hover {
+        background-color: #ea580c; /* สีส้มเข้มขึ้นเมื่อ hover */
+        transform: translateY(-2px); /* เลื่อนขึ้นเล็กน้อยเมื่อ hover */
+      }
+
+      /*
+        **CSS สำหรับ Loading Spinner**
+      */
+      #loading-spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3); /* สีขอบวงกลม */
+        border-top: 4px solid #f97316; /* สีของส่วนที่หมุน (ส้ม) */
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite; /* Animation หมุน */
+        margin: 2rem auto; /* จัดกึ่งกลาง */
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /*
+        **CSS สำหรับ Skeleton UI**
+      */
+      #skeleton-ui {
+        width: 100%;
+        max-width: 2xl;
+        margin-top: 2rem;
+        animation: pulse 1.5s infinite ease-in-out; /* Animation กระพริบ */
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      .skeleton-line {
+        height: 1.25rem; /* ขนาดความสูงของแต่ละบรรทัด */
+        background-color: #4b5563; /* สีเทาเข้มสำหรับ Dark Mode */
+        margin-bottom: 0.75rem; /* ระยะห่างระหว่างบรรทัด */
+        border-radius: 0.25rem; /* มุมโค้งมน */
+      }
+      .skeleton-image {
+        height: 150px; /* ความสูงของกล่องรูปภาพ */
+        background-color: #4b5563; /* สีเทาเข้มสำหรับ Dark Mode */
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+      }
+
+      /* ปรับสี Skeleton UI สำหรับ Light Mode */
+      .light-mode #loading-spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #f97316; /* ส้มเหมือนเดิม */
+      }
+      .light-mode #skeleton-ui .skeleton-line,
+      .light-mode #skeleton-ui .skeleton-image {
+        background-color: #d1d5db; /* สีเทาอ่อนสำหรับ Light Mode */
+      }
+
+      /* CSS สำหรับปุ่ม Pagination */
+      #pagination-container button {
+        background-color: #4b5563;
+        color: #e5e7eb;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s ease-in-out;
+      }
+      #pagination-container button:hover {
+        background-color: #6b7280;
+      }
+      #pagination-container button.active {
+        background-color: #f97316;
+        color: #ffffff;
+      }
+      .light-mode #pagination-container button {
+        background-color: #d1d5db;
+        color: #374151;
+      }
+      .light-mode #pagination-container button:hover {
+        background-color: #a3a3a3;
+      }
+      .light-mode #pagination-container button.active {
+        background-color: #f97316;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body class="font-sans min-h-screen flex flex-col">
+
+    <!-- Header Section (แถบด้านบนสุด) -->
+    <header class="bg-gray-900 text-gray-200">
+      <!-- ส่วนของโลโก้และชื่อเว็บไซต์ -->
+      <div class="container mx-auto flex justify-between items-center p-4">
+        <a href="index.html" id="home-logo-link" class="flex items-center text-2xl font-bold hover:text-blue-400 p-2 rounded-md transition duration-300 ease-in-out">
+          <!-- เปลี่ยน src ตรงนี้ให้ชี้ไปยังไฟล์ logo.png ในโฟลเดอร์ public -->
+          <img
+            id="logo-image"
+            src="/logo.png" 
+            alt="Aloneinthedark Logo"
+            class="w-10 h-10 rounded-full mr-3"
+            onerror="this.onerror=null; this.src='https://placehold.co/40x40/000000/FFFFFF?text=Logo';"
+          >
+          <span class="inline-block">
+            <span class="text-orange-400">Alone</span><span class="animate-logo-name">inthedark</span>
+          </span>
+        </a>
+        <!--
+          Mobile Menu Button (Hamburger Icon) - ยังคงอยู่ตรงนี้สำหรับมือถือเท่านั้น
+        -->
+        <button id="menu-btn" class="md:hidden p-2 focus:outline-none text-gray-200 hover:text-blue-400 transition duration-300 ease-in-out rounded-full" aria-label="Open mobile menu">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- แถบเมนูนำทางด้านล่างโลโก้ -->
+      <div class="bg-gray-900 shadow-md">
+        <div class="container mx-auto flex items-center justify-between px-4 py-2">
+          <!-- เมนูหลักสำหรับ Desktop -->
+          <nav class="hidden md:flex space-x-6 text-gray-300">
+            <a href="index.html" id="home-link" class="flex items-center hover:text-blue-400 p-2 rounded-md transition duration-300 ease-in-out">
+              <!-- Icon for Home -->
+              <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.707 2.293a1 1 0 01-1.414 0L.293 9.293a1 1 0 011.414 1.414L3 10.414V17a1 1 0 011 1h5a1 1 0 011-1v-5a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 011 1h5a1 1 0 011-1v-6.586l.293.293a1 1 0 011.414-1.414L10.707 2.293z"></path>
+              </svg>
+              <span class="text-lg">Home</span> <!-- Home ใหญ่กว่าเพื่อน -->
+            </a>
+            <a href="#1080p" id="1080p-link" class="p-2 rounded-md hover:text-blue-400 transition duration-300 ease-in-out">1080P</a>
+            <a href="#4k" id="4k-link" class="p-2 rounded-md hover:text-blue-400 transition duration-300 ease-in-out">4K</a>
+          </nav>
+
+          <!-- ปุ่มค้นหาและ Dark/Light Mode Toggle สำหรับ Desktop -->
+          <div class="flex items-center space-x-2">
+            <!-- ปุ่มค้นหาสำหรับ Desktop -->
+            <button id="desktop-search-btn" class="hidden md:block p-2 text-gray-400 hover:text-blue-400 focus:outline-none transition duration-300 ease-in-out rounded-full" aria-label="Search">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+              </svg>
+            </button>
+            <!-- Dark/Light Mode Toggle Button -->
+            <button id="theme-toggle-btn" class="p-2 focus:outline-none text-gray-400 hover:text-blue-400 transition duration-300 ease-in-out rounded-full hidden md:block" aria-label="Toggle theme">
+              <!-- Sun Icon (Light Mode - Hidden by default in HTML, shown by JS if Light Mode is active) -->
+              <svg id="sun-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 00-.707-.293H15a1 1 0 000-2h-.001a1 1 0 00-.707.293l-.707.707a1 1 0 001.414 1.414l.707-.707zM10 18a1 1 0 01-1 1v1a1 1 0 112 0v-1a1 1 0 01-1-1zm-4-8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 00-.707-.293H5a1 1 0 000-2h-.001a1 1 0 00-.707.293l-.707.707a1 1 0 001.414 1.414l.707-.707z" clip-rule="evenodd"></path>
+              </svg>
+              <!-- Moon Icon (Dark Mode - Default in HTML, hidden by JS if Light Mode is active) -->
+              <svg id="moon-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!--
+        Mobile Navigation Menu (Initially Hidden)
+      -->
+      <nav id="mobile-menu" class="hidden bg-gray-700 mt-2 py-2 rounded-b-lg shadow-inner">
+        <a href="index.html" id="mobile-home-link" class="block px-4 py-3 text-xl hover:bg-gray-600 transition duration-300 ease-in-out rounded-md mx-2 mb-1">Home</a>
+        <a href="#1080p" id="mobile-1080p-link" class="block px-4 py-3 text-xl hover:bg-gray-600 transition duration-300 ease-in-out rounded-md mx-2 mb-1">1080P</a>
+        <a href="#4k" id="mobile-4k-link" class="block px-4 py-3 text-xl hover:bg-gray-600 transition duration-300 ease-in-out rounded-md mx-2 mb-1">4K</a>
+      </nav>
+    </header>
+
+    <!-- Main Content Area - ประกอบด้วย เนื้อหาหลักด้านซ้าย และ Sidebar ทางขวา -->
+    <main class="flex flex-col md:flex-row flex-grow p-4 container mx-auto items-start">
+      <!-- Left/Main Content Area -->
+      <div id="main-content" class="flex flex-col items-center flex-grow md:mr-8 mb-8 md:mb-0">
+        <!--
+          ส่วนนี้คือหน้าหลัก (Grid View)
+          จะถูกซ่อนไว้เมื่อแสดงหน้า Detail View
+        -->
+        <div id="card-grid-container" class="mt-8 p-4 bg-gray-700 rounded-lg shadow-md text-gray-200 w-full max-w-5xl">
+            <!-- Grid Layout Section -->
+            <div id="card-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Card 1 (DLT-8808) -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/dlt-8808-detail.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dlt-8808" data-tags="1080p Japanese">
+                    <img
+                      src="/DLT-8808.png" 
+                      class="w-full h-48 object-cover"
+                      alt="DLT-8808 Thumbnail"
+                    >
+                    <div class="p-4 flex flex-col items-center w-full">
+                        <h3 class="font-bold text-lg mb-1 text-center text-white hover:text-orange-400 transition duration-300 ease-in-out">DLT-8808</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">ローアングル透明椅子 8808</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <!-- เพิ่มแท็ก #1080p ที่นี่ -->
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 2 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/dl-777-detail.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dl-777" data-tags="1080p Japanese">
+                    <img src="/dl777.png" alt="DLT-777 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DL-777</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">秘蔵 ローアングル 制服美少女編 77</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                         <!-- เพิ่มแท็ก #1080p ที่นี่ -->
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 3 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/dl-778-detail.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dl-778" data-tags="1080p Japanese">
+                    <img src="/dl778.png" alt="DL-778 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DL-778</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">秘蔵 ローアングル 制服美少女编 78</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 4 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/DLS-7705-001.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7705-001" data-tags="1080p 4K Japanese">
+                    <img src="/DLS-7705-001.png" alt="DLS-7705-001 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7705-001</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">【むき出しま●こ】夏のアクセサリーショップは、プール帰りのノーパン女子○生がま●こむき出しで…ローアングル制服 肛門コレクション7705</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 5 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/DLS-7705-002.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7705-002" data-tags="1080p 4K Japanese">
+                    <img src="/DLS-7705-002.png" alt="DLS-7705-002 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7705-002</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">【むき出しま●こ】夏のアクセサリーショップは、プール帰りのノーパン女子○生がま●こむき出しで…ローアングル制服 肛門コレクション7705</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 6 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/DLS-7705-003.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7705-003" data-tags="1080p 4K Japanese">
+                    <img src="/DLS-7705-003.png" alt="DLS-7705-003 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7705-003</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">【むき出しま●こ】夏のアクセサリーショップは、プール帰りのノーパン女子○生がま●こむき出しで…ローアングル制服 肛門コレクション7705</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 7 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/DLS-7705-004.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7705-004" data-tags="1080p 4K Japanese">
+                    <img src="/DLS-7705-004.png" alt="DLS-7705-004 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7705-004</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">【むき出しま●こ】夏のアクセサリーショップは、プール帰りのノーパン女子○生がま●こむき出しで…ローアングル制服 肛門コレクション7705</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 8 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/DLS-7705-005.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7705-005" data-tags="1080p 4K Japanese">
+                    <img src="/DLS-7705-005.png" alt="DLS-7705-005 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7705-005</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">【むき出しま●こ】夏のアクセサリーショップは、プール帰りのノーパン女子○生がま●こむき出しで…ローアングル制服 肛門コレクション7705</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 9 -->
+                <!-- แก้ไข href ให้ชี้ไปยังไฟล์ที่ถูกต้อง และ src ของรูปภาพ -->
+                <a href="./pages/japanese/DLS-7705-006.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7705-006" data-tags="1080p 4K Japanese">
+                    <img src="/DLS-7705-006.png" alt="DLS-7705-006 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7705-006</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">【むき出しま●こ】夏のアクセサリーショップは、プール帰りのノーパン女子○生がま●こむき出しで…ローアングル制服 肛門コレクション7705</p>
+                        <!-- เพิ่มส่วนของเวลา (ยอดวิวถูกลบไปแล้ว) -->
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                 <!-- Card 10 (PYM-334) -->
+                <a href="./pages/japanese/PYM-334.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="pym-334" data-tags="1080p 4K Japanese">
+                    <img src="/PYM-334.png" alt="PYM-334 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">PYM-334</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">Pee Face Shower 54 People Japanese Style Toilet Voyeur</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 11 -->
+                <a href="./pages/japanese/DKnoNICHIJOUpart01.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dk-nichijou-part01" data-tags="4K Japanese">
+                    <img src="/Presentation1/Slide1.PNG" alt="DKnoNICHIJOU only show her asshole and pussy part01 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">[4K]えちえちJK盗撮 part01</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">DKnoNICHIJOU only show her asshole and pussy part01</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 12 -->
+                <a href="./pages/japanese/DKnoNICHIJOUpart02.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dk-nichijou-part02" data-tags="4K Japanese">
+                    <img src="/Presentation1/Slide2.PNG" alt="DKnoNICHIJOU only show her asshole and pussy part02 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">[4K]えちえちJK盗撮 part02</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">DKnoNICHIJOU only show her asshole and pussy part02</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 13 -->
+                <a href="./pages/japanese/DKnoNICHIJOUpart03.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dk-nichijou-part03" data-tags="4K Japanese">
+                    <img src="/Presentation1/Slide3.PNG" alt="DKnoNICHIJOU only show her asshole and pussy part03 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">[4K]えちえちJK盗撮 part03</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">DKnoNICHIJOU only show her asshole and pussy part03</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 14 -->
+                <a href="./pages/japanese/DKnoNICHIJOUpart04.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dk-nichijou-part04" data-tags="4K Japanese">
+                    <img src="/Presentation1/Slide4.PNG" alt="DKnoNICHIJOU only show her asshole and pussy part04 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">[4K]えちえちJK盗撮 part04</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">DKnoNICHIJOU only show her asshole and pussy part04</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 15 -->
+                <a href="./pages/japanese/DKnoNICHIJOUpart05.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dk-nichijou-part05" data-tags="4K Japanese">
+                    <img src="/Presentation1/Slide5.PNG" alt="DKnoNICHIJOU only show her asshole and pussy part05 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">[4K]えちえちJK盗撮 part05</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">DKnoNICHIJOU only show her asshole and pussy part05</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-26</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 16 -->
+                <a href="./pages/japanese/dlt-8809-detail.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dlt-8809" data-tags="1080p Japanese">
+                    <img src="/dlt-8809.png" alt="DLT-8809 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center w-full">
+                        <h3 class="font-bold text-lg mb-1 text-center text-white hover:text-orange-400 transition duration-300 ease-in-out">DLT-8809</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">透明椅子 8809</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-27</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">#1080p</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 17 -->
+                <a href="./pages/japanese/dls-7706-001.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7706-001" data-tags="4K Japanese">
+                    <img src="/dls-7706-001.png" alt="DLS-7706-001 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7706-001</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">女子高生のエロ</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-28</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 18 -->
+                <a href="./pages/japanese/dls-7706-002.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7706-002" data-tags="4K Japanese">
+                    <img src="/dls-7706-002.png" alt="DLS-7706-002 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7706-002</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">女子高生のエロ</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-28</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 19 -->
+                <a href="./pages/japanese/dls-7706-003.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7706-003" data-tags="4K Japanese">
+                    <img src="/dls-7706-003.png" alt="DLS-7706-003 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7706-003</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">女子高生のエロ</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-28</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Card 20 -->
+                <a href="./pages/japanese/dls-7706-004.html" class="card-link bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col items-center cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out" data-card-id="dls-7706-004" data-tags="4K Japanese">
+                    <img src="/dls-7706-004.png" alt="DLS-7706-004 Thumbnail" class="w-full h-48 object-cover">
+                    <div class="p-4 flex flex-col items-center">
+                        <h3 class="font-bold text-lg mb-2 text-center">DLS-7706-004</h3>
+                        <p class="text-sm text-gray-400 text-center mb-4">女子高生のエロ</p>
+                        <div class="flex items-center text-gray-500 text-xs mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>08-28</span>
+                        </div>
+                        <div class="inline-block px-3 py-1 bg-orange-500 text-white text-sm rounded-md hover:bg-orange-600 transition duration-300">View More</div>
+                        <div class="flex mt-2 space-x-1">
+                           <span class="inline-block px-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full">#4K</span>
+                           <span class="inline-block px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded-full">#Japanese</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div id="no-results-message" class="text-center text-gray-400 text-lg mt-8 hidden">
+              ไม่พบผลลัพธ์ที่ตรงกับคำค้นหาของคุณ
+            </div>
+        </div>
+
+        <!-- ส่วนของ Pagination Buttons -->
+        <div id="pagination-container" class="mt-8 flex justify-center space-x-2">
+            <!-- ปุ่มจะถูกสร้างโดย JavaScript ที่นี่ -->
+        </div>
+      </div>
+
+      <!-- Right Sidebar Box -->
+      <div class="bg-gray-900 p-6 rounded-lg shadow-xl w-full md:w-1/3 lg:w-1/4 flex-shrink-0 text-gray-200 mt-8 md:mt-0">
+        <!-- Static Search Bar -->
+        <div id="search-bar-container" class="mb-8">
+          <div class="flex">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search..."
+              class="flex-grow p-3 rounded-l-md bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out"
+            />
+            <button
+              id="search-submit-btn"
+              class="px-4 py-3 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300 ease-in-out"
+              aria-label="Submit Search"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+
+        <!-- List of Links -->
+        <div>
+          <h3 class="font-bold text-xl mb-4 text-gray-100">Categories</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><a href="#" class="block hover:text-blue-400">Porn/Hentai Games</a></li>
+            <li><a href="#" class="block hover:text-blue-400">Japanese</a></li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (ตัวอย่าง) -->
+    <footer class="bg-gray-800 text-gray-400 text-center p-4 rounded-t-lg shadow-lg mt-auto">
+      <div class="container mx-auto">
+        <!-- Removed copyright text -->
+      </div>
+    </footer>
+
+    <!-- ปุ่ม Scroll to Top -->
+    <button id="scroll-to-top-btn" title="Go to top">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+      </svg>
+    </button>
+
+    <!-- Script สำหรับ Mobile Menu, Search Bar และ Theme Toggle -->
+    <script type="module">
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const searchInput = document.getElementById('search-input');
+      const searchSubmitBtn = document.getElementById('search-submit-btn');
+
+      const themeToggleBtn = document.getElementById('theme-toggle-btn');
+      const moonIcon = document.getElementById('moon-icon');
+      const sunIcon = document.getElementById('sun-icon');
+      const body = document.body;
+
+      // ส่วนของเนื้อหาหลักที่จะทำการค้นหา
+      const cards = document.querySelectorAll('.card-link');
+      const noResultsMessage = document.getElementById('no-results-message');
+      
+      // ปุ่ม Scroll to Top
+      const scrollToTopBtn = document.getElementById('scroll-to-top-btn');
+
+      // ส่วนของ Pagination
+      const paginationContainer = document.getElementById('pagination-container');
+      const cardsPerPage = 16;
+      let currentPage = 1;
+
+      // ฟังก์ชันสำหรับสลับการแสดงผลของเมนูมือถือ
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+      
+      // ฟังก์ชันสำหรับแสดง Card ในหน้าปัจจุบัน
+      function showPage(page) {
+          currentPage = page;
+          const startIndex = (page - 1) * cardsPerPage;
+          const endIndex = startIndex + cardsPerPage;
+
+          cards.forEach((card, index) => {
+              if (index >= startIndex && index < endIndex) {
+                  card.style.display = 'flex';
+              } else {
+                  card.style.display = 'none';
+              }
+          });
+
+          // อัปเดตสถานะของปุ่ม Pagination
+          const buttons = paginationContainer.querySelectorAll('button');
+          buttons.forEach(button => {
+              if (parseInt(button.textContent) === currentPage) {
+                  button.classList.add('active');
+              } else {
+                  button.classList.remove('active');
+              }
+          });
+
+          // เลื่อนหน้าต่างกลับไปด้านบนสุด
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // ฟังก์ชันสำหรับสร้างปุ่ม Pagination
+      function setupPagination() {
+          paginationContainer.innerHTML = '';
+          const pageCount = Math.ceil(cards.length / cardsPerPage);
+
+          for (let i = 1; i <= pageCount; i++) {
+              const button = document.createElement('button');
+              button.textContent = i;
+              button.addEventListener('click', () => showPage(i));
+              paginationContainer.appendChild(button);
+          }
+          // แสดงหน้าแรกทันทีเมื่อสร้างปุ่มเสร็จ
+          showPage(1);
+      }
+
+      // ฟังก์ชันสำหรับกรองเนื้อหาตามแท็ก (1080p, 4K, Japanese)
+      function filterContent(tag) {
+          let resultsFound = false;
+          let filteredCards = [];
+
+          cards.forEach(card => {
+              const tags = card.getAttribute('data-tags') || '';
+              if (tags.toLowerCase().includes(tag.toLowerCase())) {
+                  card.style.display = 'flex';
+                  resultsFound = true;
+                  filteredCards.push(card);
+              } else {
+                  card.style.display = 'none';
+              }
+          });
+          
+          if (noResultsMessage) {
+              if (resultsFound) {
+                  noResultsMessage.classList.add('hidden');
+              } else {
+                  noResultsMessage.textContent = `ไม่พบผลลัพธ์ในหมวดหมู่ ${tag}`;
+                  noResultsMessage.classList.remove('hidden');
+              }
+          }
+
+          // ซ่อนปุ่ม pagination เมื่อมีการ filter
+          paginationContainer.classList.add('hidden');
+      }
+
+      // ดักจับการคลิกบนเมนูหลักสำหรับ 1080P และ 4K
+      const navLinks = document.querySelectorAll('nav a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+          const href = link.getAttribute('href');
+          if (href.startsWith('#')) {
+            event.preventDefault(); // ป้องกันการเปลี่ยนหน้าแบบปกติ
+            const tag = href.substring(1);
+            if (tag === 'home') {
+              // ถ้าเป็น Home ให้โหลดหน้าทั้งหมดและเปิดใช้งาน Pagination ใหม่
+              window.location.href = 'index.html';
+              paginationContainer.classList.remove('hidden');
+              setupPagination();
+            } else {
+              filterContent(tag);
+            }
+          }
+        });
+      });
+
+      // ฟังก์ชันสำหรับทำการค้นหา (กรองเนื้อหา)
+      function performSearch() {
+          const query = searchInput.value.toLowerCase();
+          let resultsFound = false;
+
+          cards.forEach(card => {
+              const title = card.querySelector('h3').textContent.toLowerCase();
+              const description = card.querySelector('p').textContent.toLowerCase();
+              const tags = card.querySelector('.flex.mt-2.space-x-1').textContent.toLowerCase(); // ดึงข้อความจากแท็กทั้งหมด
+
+              if (title.includes(query) || description.includes(query) || tags.includes(query)) {
+                  card.style.display = 'flex'; // แก้ไข: แสดงเป็น flex เพื่อให้จัดวางได้ถูกต้อง
+                  resultsFound = true;
+              } else {
+                  card.style.display = 'none';
+              }
+          });
+
+          if (noResultsMessage) {
+              if (resultsFound) {
+                  noResultsMessage.classList.add('hidden');
+              } else {
+                  noResultsMessage.textContent = 'ไม่พบผลลัพธ์ที่ตรงกับคำค้นหาของคุณ';
+                  noResultsMessage.classList.remove('hidden');
+              }
+          }
+          // ซ่อนปุ่ม pagination เมื่อมีการค้นหา
+          paginationContainer.classList.add('hidden');
+      }
+
+      // เพิ่ม Event Listener ให้กับปุ่มค้นหาและช่อง Input
+      if (searchSubmitBtn) {
+          searchSubmitBtn.addEventListener('click', performSearch);
+      }
+      if (searchInput) {
+          searchInput.addEventListener('keypress', (event) => {
+              if (event.key === 'Enter') {
+                  performSearch();
+              }
+          });
+          // เมื่อช่องค้นหาว่างเปล่า ให้คืนค่า pagination
+          searchInput.addEventListener('input', () => {
+              if (searchInput.value.trim() === '') {
+                  paginationContainer.classList.remove('hidden');
+                  showPage(1); // แสดงหน้าแรก
+              }
+          });
+      }
+      
+      // ฟังก์ชันสำหรับสลับธีม (โหมดมืด/สว่าง)
+      function toggleTheme() {
+          body.classList.toggle('light-mode'); // สลับคลาส light-mode บน body
+
+          // สลับไอคอน
+          moonIcon.classList.toggle('hidden');
+          sunIcon.classList.toggle('hidden');
+
+          // อัปเดต Animation ของชื่อโลโก้
+          const logoNameSpan = document.querySelector('.animate-logo-name');
+          if (logoNameSpan) {
+            if (body.classList.contains('light-mode')) {
+                // ใน Light Mode, Header ยังเป็นสีเข้ม, โลโก้ยังคงเป็นสีอ่อน
+                logoNameSpan.style.animationName = 'fadeAndSlideInLight';
+            } else {
+                logoNameSpan.style.animationName = 'fadeAndSlideInDark';
+            }
+          }
+
+          // บันทึกการตั้งค่าธีมลงใน Local Storage
+          if (body.classList.contains('light-mode')) {
+              localStorage.setItem('theme', 'light');
+          } else {
+              localStorage.setItem('theme', 'dark');
+          }
+      }
+
+      // เพิ่ม Event Listener สำหรับปุ่มสลับธีม
+      if (themeToggleBtn) {
+          themeToggleBtn.addEventListener('click', toggleTheme);
+      }
+
+      // โหลดการตั้งค่าธีมจาก Local Storage เมื่อหน้าเว็บโหลดเสร็จ
+      document.addEventListener('DOMContentLoaded', async () => {
+          const savedTheme = localStorage.getItem('theme');
+          const logoNameSpan = document.querySelector('.animate-logo-name');
+
+          // กำหนด Logic การโหลดธีมเริ่มต้น: Light Mode เป็นค่าเริ่มต้น
+          if (savedTheme === 'dark') { // ถ้าบันทึกเป็น Dark Mode ไว้
+              body.classList.remove('light-mode'); // ลบคลาส light-mode (เพื่อใช้ body's default dark)
+              moonIcon.classList.remove('hidden'); // แสดงไอคอนพระจันทร์
+              sunIcon.classList.add('hidden'); // ซ่อนไอคอนพระอาทิตย์
+              if (logoNameSpan) {
+                logoNameSpan.style.animationName = 'fadeAndSlideInDark';
+              }
+          } else { // ถ้าบันทึกเป็น Light Mode หรือไม่มีการบันทึก (ให้ถือว่า Light Mode เป็นค่าเริ่มต้น)
+              body.classList.add('light-mode'); // เพิ่มคลาส light-mode
+              moonIcon.classList.add('hidden'); // ซ่อนไอคอนพระจันทร์
+              sunIcon.classList.remove('hidden'); // แสดงไอคอนพระอาทิตย์
+              if (logoNameSpan) {
+                logoNameSpan.style.animationName = 'fadeAndSlideInLight';
+              }
+          }
+          
+          // ลบส่วนของการโหลดเนื้อหาพร้อม Animation ออก เพื่อแสดงเนื้อหาทันที
+          // loadContentWithAnimation();
+
+          // ตรวจสอบ src ของรูปภาพโลโก้
+          const logoImage = document.getElementById('logo-image');
+          if (logoImage) {
+              console.log('Logo Image Source:', logoImage.src);
+              logoImage.onload = () => console.log('Logo Image Loaded Successfully!');
+              logoImage.onerror = () => console.error('Error loading Logo Image from:', logoImage.src);
+          }
+
+          // ตั้งค่า pagination เมื่อหน้าเว็บโหลดเสร็จ
+          setupPagination();
+      });
+
+      // JavaScript สำหรับปุ่ม Scroll to Top
+      // แสดง/ซ่อนปุ่มเมื่อเลื่อนหน้าเว็บ
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) { // ปุ่มจะแสดงเมื่อเลื่อนลงมาเกิน 50px
+          scrollToTopBtn.style.display = 'block';
+        } else {
+          scrollToTopBtn.style.display = 'none';
+        }
+      });
+
+      // เมื่อคลิกปุ่ม ให้เลื่อนกลับไปด้านบนสุดอย่างนุ่มนวล
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth' // ทำให้การเลื่อนเป็นไปอย่างนุ่มนวล
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DLT-8808 Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1f2937;
+            /* Dark gray for Dark Mode background */
+            color: #e5e7eb;
+            /* Light text for Dark Mode */
+        }
+
+        @keyframes fadeAndSlideInDark {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+                color: #9ca3af;
+                /* gray-400 */
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                color: #e5e7eb;
+                /* gray-200 */
+            }
+        }
+
+        @keyframes fadeAndSlideInLight {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+                color: #9ca3af;
+                /* gray-400 */
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                color: #e5e7eb;
+                /* gray-200 */
+            }
+        }
+
+        .animate-logo-name {
+            animation: fadeAndSlideInDark 0.8s ease-out forwards;
+        }
+
+        .light-mode .animate-logo-name {
+            animation: fadeAndSlideInLight 0.8s ease-out forwards;
+        }
+
+        .light-mode {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+
+        .light-mode header .container a,
+        .light-mode header .container #menu-btn {
+            color: #e5e7eb;
+        }
+
+        .light-mode header .container a:hover,
+        .light-mode header .container #menu-btn:hover {
+            color: #9ca3af;
+        }
+
+        .light-mode .bg-gray-900.shadow-md nav a,
+        .light-mode .bg-gray-900.shadow-md .flex.items-center.space-x-2 button {
+            color: #e5e7eb;
+        }
+
+        .light-mode .bg-gray-900.shadow-md nav a:hover,
+        .light-mode .bg-gray-900.shadow-md .flex.items-center.space-x-2 button:hover {
+            color: #9ca3af;
+        }
+
+        .light-mode #mobile-menu {
+            background-color: #e5e7eb;
+        }
+
+        .light-mode #mobile-menu a {
+            color: #1f2937;
+        }
+
+        .light-mode #mobile-menu a:hover,
+        .light-mode #mobile-menu button:hover {
+            background-color: #d1d5db;
+        }
+
+        .light-mode #mobile-menu button {
+            background-color: #9ca3af;
+            color: #1f2937;
+        }
+
+        .light-mode #main-content #no-results-message {
+            color: #4b5563;
+        }
+
+        .light-mode .flex-grow.md\:mr-8 {
+            color: #374151;
+        }
+
+        .light-mode .bg-gray-700.rounded-lg.shadow-md {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .light-mode .bg-gray-700.rounded-lg.shadow-md h2 {
+            color: #1f2937;
+        }
+
+
+        .light-mode .bg-gray-900.p-6.rounded-lg.shadow-xl h3 {
+            color: #e5e7eb;
+        }
+
+        .light-mode #search-bar-container input {
+            background-color: #4b5563;
+            color: #e5e7eb;
+            border-color: #374151;
+        }
+
+        .light-mode #search-bar-container input::placeholder {
+            color: #9ca3af;
+        }
+
+        .light-mode #search-bar-container button {
+            background-color: #f97316;
+            color: #ffffff;
+        }
+
+        .light-mode #search-bar-container button:hover {
+            background-color: #ea580c;
+        }
+
+        .light-mode .bg-gray-900.p-6.rounded-lg.shadow-xl ul a {
+            color: #9ca3af;
+        }
+
+        .light-mode .bg-gray-900.p-6.rounded-lg.shadow-xl ul a:hover {
+            color: #60a5fa;
+        }
+
+        .light-mode footer {
+            color: #e5e7eb;
+        }
+
+        #scroll-to-top-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #f97316;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            padding: 1rem;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        #scroll-to-top-btn:hover {
+            background-color: #ea580c;
+            transform: translateY(-2px);
+        }
+
+        .dotted-line {
+            border-top: 2px dashed #f97316;
+            margin: 2rem 0;
+        }
+
+        .title-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+
+<body class="font-sans min-h-screen flex flex-col">
+
+    <header class="bg-gray-900 text-gray-200">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <a href="/" class="flex items-center text-2xl font-bold hover:text-blue-400 p-2 rounded-md transition duration-300 ease-in-out">
+                <img id="logo-image" src="/logo.png" alt="Aloneinthedark Logo" class="w-10 h-10 rounded-full mr-3" onerror="this.onerror=null; this.src='https://placehold.co/40x40/000000/FFFFFF?text=Logo';">
+                <span class="inline-block">
+                    <span class="text-orange-400">Alone</span><span class="animate-logo-name">inthedark</span>
+                </span>
+            </a>
+            <button id="menu-btn" class="md:hidden p-2 focus:outline-none text-gray-200 hover:text-blue-400 transition duration-300 ease-in-out rounded-full" aria-label="Open mobile menu">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="bg-gray-900 shadow-md">
+            <div class="container mx-auto flex items-center justify-between px-4 py-2">
+                <nav class="hidden md:flex space-x-6 text-gray-300">
+                    <a href="/" class="flex items-center hover:text-blue-400 p-2 rounded-md transition duration-300 ease-in-out">
+                        <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0L.293 9.293a1 1 0 001.414 1.414L3 10.414V17a1 1 0 001 1h5a1 1 0 001-1v-5a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 001 1h5a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414L10.707 2.293z"></path>
+                        </svg>
+                        <span class="text-lg">Home</span>
+                    </a>
+                    <a href="#" id="4k-link" class="hover:text-blue-400 p-2 rounded-md transition duration-300 ease-in-out" data-category="4k">4K</a>
+                    <a href="#" id="1080p-link" class="hover:text-blue-400 p-2 rounded-md transition duration-300 ease-in-out" data-category="1080p">1080p</a>
+                </nav>
+
+                <div class="flex items-center space-x-2">
+                    <button id="desktop-search-btn" class="hidden md:block p-2 text-gray-400 hover:text-blue-400 focus:outline-none transition duration-300 ease-in-out rounded-full" aria-label="Search">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <button id="theme-toggle-btn" class="p-2 focus:outline-none text-gray-400 hover:text-blue-400 transition duration-300 ease-in-out rounded-full hidden md:block" aria-label="Toggle theme">
+                        <svg id="sun-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 00-.707-.293H15a1 1 0 000-2h-.001a1 1 0 00-.707.293l-.707.707a1 1 0 001.414 1.414l.707-.707zM10 18a1 1 0 01-1 1v1a1 1 0 112 0v-1a1 1 0 01-1-1zm-4-8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 00-.707-.293H5a1 1 0 000-2h-.001a1 1 0 00-.707.293l-.707.707a1 1 0 001.414 1.414l.707-.707z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg id="moon-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <nav id="mobile-menu" class="hidden bg-gray-700 mt-2 py-2 rounded-b-lg shadow-inner">
+            <a href="/" class="block px-4 py-3 text-xl hover:bg-gray-600 transition duration-300 ease-in-out rounded-md mx-2 mb-1">Home</a>
+            <a href="#" id="4k-link-mobile" class="block px-4 py-3 text-lg hover:bg-gray-600 transition duration-300 ease-in-out rounded-md mx-2 mb-1" data-category="4k">4K</a>
+            <a href="#" id="1080p-link-mobile" class="block px-4 py-3 text-lg hover:bg-gray-600 transition duration-300 ease-in-out rounded-md mx-2" data-category="1080p">1080p</a>
+        </nav>
+    </header>
+
+    <main class="flex flex-col md:flex-row flex-grow p-4 container mx-auto items-start">
+        <div id="dynamic-content" class="flex-grow md:mr-8 mb-8 md:mb-0">
+            <!-- Main Image with Title and Number -->
+            <div class="flex flex-col items-center relative">
+                <!-- Title Container -->
+                <div class="title-container">
+                    <h1 class="text-xl font-bold mb-1">
+                        インディーズ　レンタルアップDVD　ローアングル透明椅子 8808
+                    </h1>
+                </div>
+                <!-- แก้ไขพาธรูปภาพให้ถูกต้องตามโครงสร้างไฟล์ -->
+                <img src="/DLT-8808.png" alt="DLT-8808 Thumbnail" class="w-full max-w-sm rounded-lg shadow-xl" onerror="this.onerror=null; this.src='https://placehold.co/400x300/1e293b/94a3b8?text=Image+Not+Found';">
+            </div>
+
+            <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden p-6 md:p-8 mt-8">
+                <div class="flex flex-col items-center justify-center text-center">
+                    <p class="text-gray-400 mb-6">
+                        市民プール近くの雑貨店・ドラッグストア。プールの後は、ショーツをずらして、ま●こをむき出しにして、エアコンの効いたお店で涼む・・・そんな美少女たちが、しゃがんだところを、前から後ろからローアングルで接近狙い撮り。美少女たちの、美しいぬるぬるむき出し秘部をローアングルから目の前で観察する!!
+                    </p>
+                    <div class="space-y-2 text-sm text-gray-400 w-full max-w-sm mx-auto">
+                        <p><strong>Video format:</strong> MP4</p>
+                        <p><strong>duration:</strong> 1 hours 23 minutes 21 seconds</p>
+                        <p><strong>video size:</strong> 1920 x 1080</p>
+                        <p><strong>bit rate:</strong> 6000 kbps</p>
+                        <p><strong>file size:</strong> 3.47 GB</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-center my-12">
+                <h3 class="text-xl font-bold text-gray-200 mb-6">Download</h3>
+                <a href="https://rapidgator.net/file/9907cbed64da976be181a07b212bfd90/1080pDLT-8808.mp4.html" class="block px-6 py-3 bg-orange-500 text-white font-bold rounded-lg shadow-lg hover:bg-orange-600 transition-all duration-300 ease-in-out transform hover:scale-105">
+                    DLT-8808-1080p.mp4
+                </a>
+            </div>
+
+            <div class="dotted-line"></div>
+
+            <div class="flex justify-center mt-8">
+                <a href="/" class="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg shadow-lg hover:bg-blue-600 transition-all duration-300 ease-in-out transform hover:scale-105">
+                    กลับหน้าหลัก
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-lg shadow-xl w-full md:w-1/3 lg:w-1/4 flex-shrink-0 text-gray-200 mt-8 md:mt-0">
+            <div id="search-bar-container" class="mb-8">
+                <div class="flex">
+                    <input type="text" id="search-input" placeholder="Search..." class="flex-grow p-3 rounded-l-md bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out" />
+                    <button id="search-submit-btn" class="px-4 py-3 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300 ease-in-out" aria-label="Submit Search">
+                        Search
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-xl mb-4 text-gray-100">Categories</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li><a href="#" class="block hover:text-blue-400 category-link" data-category="porn-hentai-games">Porn/Hentai Games</a></li>
+                    <li><a href="#" class="block hover:text-blue-400 category-link" data-category="japanese">Japanese</a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 text-center p-4 rounded-t-lg shadow-lg mt-auto">
+        <div class="container mx-auto">
+        </div>
+    </footer>
+
+    <button id="scroll-to-top-btn" title="Go to top">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
+    </button>
+
+    <script type="module">
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        const body = document.body;
+        const scrollToTopBtn = document.getElementById('scroll-to-top-btn');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        function toggleTheme() {
+            body.classList.toggle('light-mode');
+
+            moonIcon.classList.toggle('hidden');
+            sunIcon.classList.toggle('hidden');
+
+            const logoNameSpan = document.querySelector('.animate-logo-name');
+            if (logoNameSpan) {
+                if (body.classList.contains('light-mode')) {
+                    logoNameSpan.style.animationName = 'fadeAndSlideInLight';
+                } else {
+                    logoNameSpan.style.animationName = 'fadeAndSlideInDark';
+                }
+            }
+
+            if (body.classList.contains('light-mode')) {
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', toggleTheme);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const savedTheme = localStorage.getItem('theme');
+            const logoNameSpan = document.querySelector('.animate-logo-name');
+
+            if (savedTheme === 'dark') {
+                body.classList.remove('light-mode');
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+                if (logoNameSpan) {
+                    logoNameSpan.style.animationName = 'fadeAndSlideInDark';
+                }
+            } else {
+                body.classList.add('light-mode');
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+                if (logoNameSpan) {
+                    logoNameSpan.style.animationName = 'fadeAndSlideInLight';
+                }
+            }
+
+            // Handle top nav and side category link clicks
+            const allCategoryLinks = document.querySelectorAll('[data-category]');
+            const searchBtn = document.getElementById('search-submit-btn');
+            const searchInput = document.getElementById('search-input');
+
+            // ใช้ loop เดียวเพื่อครอบคลุมทุกปุ่มที่มี data-category
+            allCategoryLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const category = link.getAttribute('data-category');
+                    sessionStorage.setItem('filterCategory', category);
+                    // Clear search query
+                    sessionStorage.removeItem('searchQuery');
+                    window.location.href = '/index.html';
+                });
+            });
+
+            searchBtn.addEventListener('click', () => {
+                const query = searchInput.value.trim();
+                if (query) {
+                    sessionStorage.setItem('searchQuery', query);
+                    // Clear category filter
+                    sessionStorage.removeItem('filterCategory');
+                    window.location.href = '/index.html';
+                }
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                scrollToTopBtn.style.display = 'block';
+            } else {
+                scrollToTopBtn.style.display = 'none';
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>
